@@ -54,41 +54,41 @@ namespace Unified.UniversalBlur.Runtime
                 autoGenerateMips = _blurConfig.EnableMipMaps
             };
 
-        [Obsolete("Execute is deprecated, use RecordRenderGraph instead.")]
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-        {
-            var cmd = CommandBufferPool.Get();
+//        [Obsolete("Execute is deprecated, use RecordRenderGraph instead.")]
+//        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+//        {
+//            var cmd = CommandBufferPool.Get();
 
-            var descriptor = GetDescriptor();
+//            var descriptor = GetDescriptor();
 
-#if UNITY_6000_0_OR_NEWER
-            RenderingUtils.ReAllocateHandleIfNeeded(ref _sourceRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureSourceName);
-            RenderingUtils.ReAllocateHandleIfNeeded(ref _destinationRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureDestinationName);
-            #else
-            RenderingUtils.ReAllocateIfNeeded(ref _sourceRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureSourceName);
-            RenderingUtils.ReAllocateIfNeeded(ref _destinationRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureDestinationName);
-            #endif
+//#if UNITY_6000_0_OR_NEWER
+//            RenderingUtils.ReAllocateHandleIfNeeded(ref _sourceRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureSourceName);
+//            RenderingUtils.ReAllocateHandleIfNeeded(ref _destinationRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureDestinationName);
+//            #else
+//            RenderingUtils.ReAllocateIfNeeded(ref _sourceRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureSourceName);
+//            RenderingUtils.ReAllocateIfNeeded(ref _destinationRT, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: k_BlurTextureDestinationName);
+//            #endif
             
 
-            var colorTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
+//            var colorTarget = renderingData.cameraData.renderer.cameraColorTargetHandle;
 
-            using (new ProfilingScope(cmd, _profilingSampler))
-            {
-                BlurPasses.KawaseExecutePass(new LegacyPassData()
-                {
-                    BlurConfig = _blurConfig,
-                    MaterialPropertyBlock = _propertyBlock,
-                    ColorSource = colorTarget,
-                    Source = _sourceRT,
-                    Destination = _destinationRT
-                }, new WrappedCommandBuffer(cmd));
+//            using (new ProfilingScope(cmd, _profilingSampler))
+//            {
+//                BlurPasses.KawaseExecutePass(new LegacyPassData()
+//                {
+//                    BlurConfig = _blurConfig,
+//                    MaterialPropertyBlock = _propertyBlock,
+//                    ColorSource = colorTarget,
+//                    Source = _sourceRT,
+//                    Destination = _destinationRT
+//                }, new WrappedCommandBuffer(cmd));
 
-                cmd.SetGlobalTexture(Constants.GlobalFullScreenBlurTextureId, _destinationRT);
-            }
+//                cmd.SetGlobalTexture(Constants.GlobalFullScreenBlurTextureId, _destinationRT);
+//            }
 
-            context.ExecuteCommandBuffer(cmd);
-            CommandBufferPool.Release(cmd);
-        }
+//            context.ExecuteCommandBuffer(cmd);
+//            CommandBufferPool.Release(cmd);
+//        }
 
 #if UNITY_6000_0_OR_NEWER
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
